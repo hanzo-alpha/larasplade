@@ -5,13 +5,38 @@
 
 version: 2
 updates:
-  - package-ecosystem: "composer" # See documentation for possible values
-    directory: "/" # Location of package manifests
-    schedule:
-      interval: "weekly"
+  # Maintain dependencies for GitHub Actions
   - package-ecosystem: "github-actions"
-    # Workflow files stored in the
-    # default location of `.github/workflows`
     directory: "/"
     schedule:
       interval: "weekly"
+
+  # Maintain dependencies for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      # Allow updates for Lodash
+      - dependency-name: "vite"
+      # Allow updates for React and any packages starting "react"
+      - dependency-name: "@vitejs/plugin-vue"
+      - dependency-name: "@tailwindcss*"
+      - dependency-name: "axios"
+      - dependency-name: "laravel-vite-plugin"
+      - dependency-name: "vue"
+    commit-message:
+      # Prefix all commit messages with "npm: "
+      prefix: "npm"
+
+  # Maintain dependencies for Composer
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    allow:
+      # Allow both direct and indirect updates for all packages
+      - dependency-type: "all"
+    commit-message:
+      prefix: "Composer"
+      include: "scope"
